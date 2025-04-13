@@ -2,6 +2,7 @@ import { Entity, Key } from "./Entity";
 import { Job } from "./Job";
 
 export class Person extends Entity implements IPerson {
+    static KEY: Key = "person"
     key: Key = "person"
     id: string;
     age: number;
@@ -16,7 +17,6 @@ export class Person extends Entity implements IPerson {
 }
 
 interface IPerson extends Entity {
-    id: string;
     age: number;
     job?: Job;
 }

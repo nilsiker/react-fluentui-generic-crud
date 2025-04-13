@@ -15,7 +15,7 @@ import { capitalizeFirstLetter } from "../strings/stringUtilities";
 
 interface INewFormProps<T extends Entity> {
   open: boolean;
-  itemType: new () => T;
+  entity: new () => T;
   onSubmit: () => void;
 }
 
@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 });
 
 export const NewItemDrawer = <T extends Entity>(props: INewFormProps<T>) => {
-  const properties = Entity.COLUMN_NAMES(props.itemType).filter(
+  const properties = Entity.COLUMN_NAMES(props.entity).filter(
     (col) => col !== "id"
   );
   console.log(properties);

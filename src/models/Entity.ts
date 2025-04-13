@@ -1,4 +1,4 @@
-export type Key = "person" | "job";
+export type Key = "person" | "job" | "task";
 
 export abstract class Entity {
     abstract key: Key;

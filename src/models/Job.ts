@@ -2,7 +2,6 @@ import { Entity, Key } from "./Entity";
 
 export class Job extends Entity implements IJob {
     key: Key = "job";
-
     id: string;
     description: string;
 
@@ -18,6 +17,5 @@ export class Job extends Entity implements IJob {
 }
 
 interface IJob  {
-    id: string;
     description: string;
 }

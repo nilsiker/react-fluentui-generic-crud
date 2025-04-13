@@ -8,9 +8,11 @@ import {
   webDarkTheme,
 } from "@fluentui/react-components";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import { PersonPage } from "./pages/PersonPage";
-import { JobPage } from "./pages/JobPage";
 import { useTabContext } from "./providers/TabProvider";
+import { CrudPage } from "./pages/CrudPage";
+import { Person } from "./models/Person";
+import { Job } from "./models/Job";
+import { Task } from "./models/Task";
 
 const useStyles = makeStyles({
   root: {
@@ -30,9 +32,8 @@ export const App = () => {
 
   React.useEffect(() => {
     navigate(activeTab);
-    console.log(activeTab);
-    
   }, [navigate, activeTab]);
+
 
   return (
     <FluentProvider theme={webDarkTheme} className={classes.root}>
@@ -42,11 +43,13 @@ export const App = () => {
           onTabSelect={(_, data) => setActiveTab(String(data.value))}
         >
           <Tab content="Person" id="person" value={"person"} />
-          <Tab content="Job" id="job" value="job"  />
+          <Tab content="Job" id="job" value="job" />
+          <Tab content="Task" id="task" value="task" />
         </TabList>
         <Routes>
-          <Route path="/person" element={<PersonPage />} />
-          <Route path="/job" element={<JobPage />} />
+          <Route path="/person" element={<CrudPage entity={Person} />} />
+          <Route path="/job" element={<CrudPage entity={Job} />} />
+          <Route path="/task" element={<CrudPage entity={Task} />} />
         </Routes>
       </div>
     </FluentProvider>

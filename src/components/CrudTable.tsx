@@ -23,6 +23,7 @@ interface ICrudTableProps<T> {
 const useStyle = makeStyles({
   root: {
     minWidth: "150px",
+    maxWidth: "550px",
   },
   header: { borderStartEndRadius: "4px", borderStartStartRadius: "4px" },
   body: {
@@ -30,6 +31,12 @@ const useStyle = makeStyles({
       borderEndStartRadius: "4px",
       borderEndEndRadius: "4px",
     },
+  },
+  cell: {
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    maxWidth: "20px",
   },
 });
 
@@ -44,12 +51,15 @@ export const CrudTable = <T extends Entity>(
     createTableColumn({
       columnId: String(column),
       renderHeaderCell: () => capitalizeFirstLetter(String(column)),
-      renderCell: (item: T) =>
-        item[column] instanceof Entity ? (
-          <a onClick={() => setActiveTab("job")}>{String(item[column])}</a>
+      renderCell: (item: T) => {
+        return item[column] instanceof Entity ? (
+          <a onClick={() => setActiveTab((item[column] as Entity).key)}>
+            {String(item[column].id)}
+          </a>
         ) : (
           String(item[column] ?? "-")
-        ),
+        );
+      },
       compare: (a, b) =>
         a[column] === b[column] ? 0 : a[column] > b[column] ? 1 : 0,
     })
@@ -73,6 +83,7 @@ export const CrudTable = <T extends Entity>(
       items={props.items}
       selectionMode="multiselect"
       subtleSelection
+      resizableColumns
       onSelectionChange={onSelectionChange}
       sortable
     >
@@ -85,7 +96,9 @@ export const CrudTable = <T extends Entity>(
           }}
         >
           {({ renderHeaderCell }) => (
-            <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+            <DataGridHeaderCell className={classes.cell}>
+              {renderHeaderCell()}
+            </DataGridHeaderCell>
           )}
         </DataGridRow>
       </DataGridHeader>
@@ -99,7 +112,9 @@ export const CrudTable = <T extends Entity>(
             }}
           >
             {({ renderCell }) => (
-              <DataGridCell>{renderCell(item)}</DataGridCell>
+              <DataGridCell className={classes.cell}>
+                {renderCell(item)}
+              </DataGridCell>
             )}
           </DataGridRow>
         )}

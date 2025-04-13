@@ -1,11 +1,15 @@
-import { makeStyles } from "@fluentui/react-components";
-import { CrudTable } from "../components/CrudTable";
+import React from "react";
 import { useItems } from "../hooks/useItems";
 import { Entity } from "../models/Entity";
-import { Job } from "../models/Job";
-import { CrudToolbar } from "../components/CrudToolbar";
 import { NewItemDrawer } from "../components/NewItemDrawer";
-import React from "react";
+import { CrudToolbar } from "../components/CrudToolbar";
+import { CrudTable } from "../components/CrudTable";
+import { makeStyles } from "@fluentui/react-components";
+import { useTabContext } from "../providers/TabProvider";
+
+interface ICrudPageProps<T> {
+  entity: new () => T;
+}
 
 const useStyle = makeStyles({
   root: {
@@ -13,17 +17,23 @@ const useStyle = makeStyles({
   },
 });
 
-export const JobPage = (): React.ReactElement => {
-  const { items } = useItems(Job);
+export const CrudPage = <T extends Entity>({ entity }: ICrudPageProps<T>) => {
+  const { items } = useItems(entity);
   const [isNewFormOpen, setIsNewFormOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState<Job[]>([]);
+  const [selected, setSelected] = React.useState<T[]>([]);
+
+  const { activeTab } = useTabContext();
+
+  React.useEffect(() => {
+    setSelected([]);
+  }, [activeTab]);
 
   const classes = useStyle();
 
   return (
     <div className={classes.root}>
       <NewItemDrawer
-        itemType={Job}
+        entity={entity}
         open={isNewFormOpen}
         onSubmit={() => setIsNewFormOpen(false)}
       />
@@ -35,7 +45,7 @@ export const JobPage = (): React.ReactElement => {
       />
       <CrudTable
         items={items}
-        columns={Entity.COLUMN_NAMES(Job)}
+        columns={Entity.COLUMN_NAMES(entity)}
         onSelectionChange={setSelected}
       />
     </div>
