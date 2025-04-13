@@ -11,8 +11,8 @@ import {
 } from "@fluentui/react-components";
 import { Entity } from "../models/Entity";
 import React from "react";
-import { useTabContext } from "../providers/TabProvider";
 import { capitalizeFirstLetter } from "../strings/stringUtilities";
+import { useTabContext } from "../hooks/useTabContext";
 
 interface ICrudTableProps<T> {
   items: T[];
@@ -43,9 +43,10 @@ const useStyle = makeStyles({
 export const CrudTable = <T extends Entity>(
   props: ICrudTableProps<T>
 ): React.ReactElement => {
+  const { activeTab, setActiveTab } = useTabContext();
+  
   const classes = useStyle();
-
-  const { setActiveTab } = useTabContext();
+  const [selected, setSelected] = React.useState<Set<TableRowId>>(new Set());
 
   const columnsDefinitions = props.columns.map((column) =>
     createTableColumn({
@@ -71,10 +72,15 @@ export const CrudTable = <T extends Entity>(
       selectedItems: Set<TableRowId>;
     }
   ) => {
+    setSelected(data.selectedItems);
     props.onSelectionChange(
       [...data.selectedItems].map((id) => props.items[Number(id)])
     );
   };
+
+  React.useEffect(() => {
+    setSelected(new Set());
+  }, [activeTab]);
 
   return (
     <DataGrid
@@ -84,6 +90,7 @@ export const CrudTable = <T extends Entity>(
       selectionMode="multiselect"
       subtleSelection
       resizableColumns
+      selectedItems={selected}
       onSelectionChange={onSelectionChange}
       sortable
     >

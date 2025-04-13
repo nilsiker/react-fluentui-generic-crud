@@ -8,11 +8,12 @@ import {
   webDarkTheme,
 } from "@fluentui/react-components";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import { useTabContext } from "./providers/TabProvider";
+
 import { CrudPage } from "./pages/CrudPage";
 import { Person } from "./models/Person";
 import { Job } from "./models/Job";
 import { Task } from "./models/Task";
+import { useTabContext } from "./hooks/useTabContext";
 
 const useStyles = makeStyles({
   root: {
@@ -33,7 +34,6 @@ export const App = () => {
   React.useEffect(() => {
     navigate(activeTab);
   }, [navigate, activeTab]);
-
 
   return (
     <FluentProvider theme={webDarkTheme} className={classes.root}>

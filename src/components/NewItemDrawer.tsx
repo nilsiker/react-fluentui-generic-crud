@@ -8,25 +8,25 @@ import {
   Label,
   makeStyles,
   OverlayDrawer,
+  useRestoreFocusSource,
+  useRestoreFocusTarget,
 } from "@fluentui/react-components";
 import { Entity } from "../models/Entity";
 import { Dismiss24Regular } from "@fluentui/react-icons";
 import { capitalizeFirstLetter } from "../strings/stringUtilities";
 
 interface INewFormProps<T extends Entity> {
-  open: boolean;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
   entity: new () => T;
   onSubmit: () => void;
 }
 
 const useStyles = makeStyles({
   root: {
-    // Stack the label above the field
     display: "flex",
     flexDirection: "column",
-    // Use 2px gap below the label (per the design system)
     gap: "2px",
-    // Prevent the example from taking the full width of the page (optional)
     maxWidth: "400px",
   },
 });
@@ -35,16 +35,24 @@ export const NewItemDrawer = <T extends Entity>(props: INewFormProps<T>) => {
   const properties = Entity.COLUMN_NAMES(props.entity).filter(
     (col) => col !== "id"
   );
-  console.log(properties);
 
   const styles = useStyles();
 
+  const restoreFocusTargetAttributes = useRestoreFocusTarget();
+  const restoreFocusSourceAttributes = useRestoreFocusSource();
+
   return (
-    <OverlayDrawer open={props.open} position="end">
+    <OverlayDrawer
+      {...restoreFocusSourceAttributes}
+      open={props.isOpen}
+      position="end"
+      onOpenChange={(_, { open }) => props.setIsOpen(open)}
+    >
       <DrawerHeader>
         <DrawerHeaderTitle
           action={
             <Button
+              {...restoreFocusTargetAttributes}
               appearance="subtle"
               aria-label="Close"
               icon={<Dismiss24Regular />}
@@ -57,14 +65,18 @@ export const NewItemDrawer = <T extends Entity>(props: INewFormProps<T>) => {
       </DrawerHeader>
       <DrawerBody>
         {properties.map((property) => (
-          <div className={styles.root}>
+          <div key={String(property)} className={styles.root}>
             <Label>{capitalizeFirstLetter(String(property))}: </Label>
             <Input />
           </div>
         ))}
       </DrawerBody>
       <DrawerFooter>
-        <Button appearance="primary" onClick={props.onSubmit}>
+        <Button
+          {...restoreFocusTargetAttributes}
+          appearance="primary"
+          onClick={props.onSubmit}
+        >
           Submit
         </Button>
       </DrawerFooter>

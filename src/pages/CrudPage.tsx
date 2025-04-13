@@ -5,7 +5,7 @@ import { NewItemDrawer } from "../components/NewItemDrawer";
 import { CrudToolbar } from "../components/CrudToolbar";
 import { CrudTable } from "../components/CrudTable";
 import { makeStyles } from "@fluentui/react-components";
-import { useTabContext } from "../providers/TabProvider";
+import { useTabContext } from "../hooks/useTabContext";
 
 interface ICrudPageProps<T> {
   entity: new () => T;
@@ -18,11 +18,13 @@ const useStyle = makeStyles({
 });
 
 export const CrudPage = <T extends Entity>({ entity }: ICrudPageProps<T>) => {
+  const { activeTab } = useTabContext();
+
   const { items } = useItems(entity);
   const [isNewFormOpen, setIsNewFormOpen] = React.useState(false);
   const [selected, setSelected] = React.useState<T[]>([]);
 
-  const { activeTab } = useTabContext();
+  React.useEffect(() => {}, [selected]);
 
   React.useEffect(() => {
     setSelected([]);
@@ -34,7 +36,8 @@ export const CrudPage = <T extends Entity>({ entity }: ICrudPageProps<T>) => {
     <div className={classes.root}>
       <NewItemDrawer
         entity={entity}
-        open={isNewFormOpen}
+        isOpen={isNewFormOpen}
+        setIsOpen={setIsNewFormOpen}
         onSubmit={() => setIsNewFormOpen(false)}
       />
       <CrudToolbar

@@ -3,14 +3,14 @@ import ReactDOM from "react-dom/client";
 import { App } from "./App.tsx";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
-import { TabProvider } from "./providers/TabProvider.tsx";
+import { TabContextProvider } from "./providers/TabContextProvider.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <TabProvider>
+      <TabContextProvider>
         <App />
-      </TabProvider>
+      </TabContextProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
