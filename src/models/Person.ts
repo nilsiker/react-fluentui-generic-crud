@@ -1,7 +1,7 @@
-import { Entity, Keys } from "./Entity";
+import { Entity, Key } from "./Entity";
 
 export class Person extends Entity implements IPerson {
-    key: keyof Keys = "person";
+    key: Key = "person";
     name: string;
     age: number;
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Entity, Keys } from "../models/Entity"
+import { Entity, Key } from "../models/Entity"
 import { CrudService } from "../services/CrudService";
 
 export interface IUseItems<T> {
@@ -8,7 +8,7 @@ export interface IUseItems<T> {
     setSelected: (items: T[]) => void;
 }
 
-export const useItems = <T extends Entity>(key: keyof Keys): IUseItems<T> => {
+export const useItems = <T extends Entity>(key: Key): IUseItems<T> => {
     const [items, setItems] = React.useState<T[]>([]);
     const [selected, setSelected] = React.useState<T[]>([]);
 

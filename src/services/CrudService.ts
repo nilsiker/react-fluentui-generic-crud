@@ -1,11 +1,11 @@
-import {  Entity, Keys } from "../models/Entity";
+import {  Entity, Key } from "../models/Entity";
 import { Job } from "../models/Job";
 import { Person } from "../models/Person";
 
 export class CrudService<T extends Entity> {
-    readonly key: keyof Keys;
+    readonly key: Key;
 
-    constructor(key: keyof Keys) {
+    constructor(key: Key) {
         this.key = key;
     }
 

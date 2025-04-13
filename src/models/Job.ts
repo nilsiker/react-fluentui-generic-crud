@@ -1,7 +1,7 @@
-import { Entity, Keys } from "./Entity";
+import { Entity, Key } from "./Entity";
 
 export class Job extends Entity implements IJob {
-    key: keyof Keys = "job";
+    key: Key = "job";
     name: string;
     description: string;
 

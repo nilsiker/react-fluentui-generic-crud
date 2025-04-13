@@ -1,8 +1,8 @@
 
 export abstract class Entity {
-    readonly key: keyof Keys;
+    readonly key: Key;
 
-    constructor(key: keyof Keys) {
+    constructor(key: Key) {
         this.key = key;
     }
 
@@ -12,7 +12,4 @@ export abstract class Entity {
     }
 }
 
-export type Keys = {
-    "person": string;
-    "job": string;
-}
+export type Key = "person" | "job";
