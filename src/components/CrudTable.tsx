@@ -11,6 +11,8 @@ import {
 } from "@fluentui/react-components";
 import { Entity } from "../models/Entity";
 import React from "react";
+import { useTabContext } from "../providers/TabProvider";
+import { capitalizeFirstLetter } from "../strings/stringUtilities";
 
 interface ICrudTableProps<T> {
   items: T[];
@@ -20,21 +22,34 @@ interface ICrudTableProps<T> {
 
 const useStyle = makeStyles({
   root: {
-    minWidth: "150",
+    minWidth: "150px",
+  },
+  header: { borderStartEndRadius: "4px", borderStartStartRadius: "4px" },
+  body: {
+    ":last-child": {
+      borderEndStartRadius: "4px",
+      borderEndEndRadius: "4px",
+    },
   },
 });
 
 export const CrudTable = <T extends Entity>(
   props: ICrudTableProps<T>
 ): React.ReactElement => {
-
   const classes = useStyle();
-  
+
+  const { setActiveTab } = useTabContext();
+
   const columnsDefinitions = props.columns.map((column) =>
     createTableColumn({
       columnId: String(column),
-      renderHeaderCell: () => String(column),
-      renderCell: (item: T) => String(item[column]),
+      renderHeaderCell: () => capitalizeFirstLetter(String(column)),
+      renderCell: (item: T) =>
+        item[column] instanceof Entity ? (
+          <a onClick={() => setActiveTab("job")}>{String(item[column])}</a>
+        ) : (
+          String(item[column] ?? "-")
+        ),
       compare: (a, b) =>
         a[column] === b[column] ? 0 : a[column] > b[column] ? 1 : 0,
     })
@@ -63,6 +78,8 @@ export const CrudTable = <T extends Entity>(
     >
       <DataGridHeader>
         <DataGridRow
+          className={classes.header}
+          appearance="neutral"
           selectionCell={{
             checkboxIndicator: { "aria-label": "Select all rows" },
           }}
@@ -75,6 +92,7 @@ export const CrudTable = <T extends Entity>(
       <DataGridBody<T>>
         {({ item, rowId }) => (
           <DataGridRow<T>
+            className={classes.body}
             key={rowId}
             selectionCell={{
               checkboxIndicator: { "aria-label": "Select row" },

@@ -1,5 +1,5 @@
 import React from "react";
-import { Entity, Key } from "../models/Entity"
+import { Entity } from "../models/Entity"
 import { CrudService } from "../services/CrudService";
 
 export interface IUseItems<T> {
@@ -8,14 +8,14 @@ export interface IUseItems<T> {
     setSelected: (items: T[]) => void;
 }
 
-export const useItems = <T extends Entity>(key: Key): IUseItems<T> => {
+export const useItems = <T extends Entity>(ctor: new() => T): IUseItems<T> => {
     const [items, setItems] = React.useState<T[]>([]);
     const [selected, setSelected] = React.useState<T[]>([]);
 
     React.useEffect(() => {
-        const service = new CrudService<T>(key);
+        const service = new CrudService<T>(ctor);
         setItems(service.list())
-    }, [key])
+    }, [ctor])
 
     return { items, selected, setSelected }
 }

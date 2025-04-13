@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.css";
 import {
   FluentProvider,
@@ -10,7 +10,7 @@ import {
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { PersonPage } from "./pages/PersonPage";
 import { JobPage } from "./pages/JobPage";
-
+import { useTabContext } from "./providers/TabProvider";
 
 const useStyles = makeStyles({
   root: {
@@ -22,28 +22,31 @@ const useStyles = makeStyles({
 });
 
 export const App = () => {
-  const [activeTab, setActiveTab] = useState("person");
+  const { activeTab, setActiveTab } = useTabContext();
+
   const navigate = useNavigate();
 
   const classes = useStyles();
 
   React.useEffect(() => {
     navigate(activeTab);
+    console.log(activeTab);
+    
   }, [navigate, activeTab]);
 
   return (
     <FluentProvider theme={webDarkTheme} className={classes.root}>
       <div className={classes.content}>
         <TabList
-          defaultSelectedValue={activeTab}
+          selectedValue={activeTab}
           onTabSelect={(_, data) => setActiveTab(String(data.value))}
         >
-          <Tab content="Person" value={"person"} />
-          <Tab content="Job" value="job" />
+          <Tab content="Person" id="person" value={"person"} />
+          <Tab content="Job" id="job" value="job"  />
         </TabList>
         <Routes>
           <Route path="/person" element={<PersonPage />} />
-          <Route path="/:schema" element={<JobPage />} />
+          <Route path="/job" element={<JobPage />} />
         </Routes>
       </div>
     </FluentProvider>

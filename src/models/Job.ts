@@ -2,21 +2,22 @@ import { Entity, Key } from "./Entity";
 
 export class Job extends Entity implements IJob {
     key: Key = "job";
-    name: string;
+
+    id: string;
     description: string;
 
     constructor(name: string = "", description: string = "") {
-        super("job")
-        this.name = name;
+        super()
+        this.id = name;
         this.description = description;
     }
 
-    columns(): (keyof Job)[] {
-        return Object.keys(this) as (keyof Job)[];
+    toString(): string {
+        return `${this.id}`
     }
 }
 
 interface IJob  {
-    name: string;
+    id: string;
     description: string;
 }

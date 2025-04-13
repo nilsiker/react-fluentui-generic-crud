@@ -1,5 +1,5 @@
 import React from "react";
-import { NewForm } from "../components/NewForm";
+import { NewItemDrawer } from "../components/NewItemDrawer";
 import { CrudTable } from "../components/CrudTable";
 import { CrudToolbar } from "../components/CrudToolbar";
 import { useItems } from "../hooks/useItems";
@@ -7,22 +7,26 @@ import { Entity } from "../models/Entity";
 import { Person } from "../models/Person";
 
 export const PersonPage = () => {
-  const { items } = useItems<Person>("person");
-  const [formOpen, setFormOpen] = React.useState(false);
+  const { items } = useItems(Person);
+  const [newDrawerOpen, setNewDrawerOpen] = React.useState(false);
   const [selected, setSelected] = React.useState<Person[]>([]);
 
   return (
     <>
-      <NewForm open={formOpen} onSubmit={() => setFormOpen(false)} />
+      <NewItemDrawer
+        open={newDrawerOpen}
+        itemType={Person}
+        onSubmit={() => setNewDrawerOpen(false)}
+      />
       <CrudToolbar
         selected={selected}
-        onAddNewClick={() => setFormOpen(true)}
+        onAddNewClick={() => setNewDrawerOpen(true)}
         onEditClick={(item) => console.log(item)}
         onSettingsClick={() => console.log("settings")}
       />
-      <CrudTable<Person>
+      <CrudTable
         items={items}
-        columns={Entity.columns(Person)}
+        columns={Entity.COLUMN_NAMES(Person)}
         onSelectionChange={setSelected}
       />
     </>

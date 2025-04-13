@@ -1,18 +1,22 @@
 import { Entity, Key } from "./Entity";
+import { Job } from "./Job";
 
 export class Person extends Entity implements IPerson {
-    key: Key = "person";
-    name: string;
+    key: Key = "person"
+    id: string;
     age: number;
+    job?: Job;
 
-    constructor(name: string = "", age: number = -1) {
-        super("person");
-        this.name = name;
+    constructor(id: string = "", age: number = -1, job: Job | undefined = undefined) {
+        super();
+        this.id = id;
         this.age = age;
+        this.job = job;
     }
 }
 
 interface IPerson extends Entity {
-    name: string;
+    id: string;
     age: number;
+    job?: Job;
 }
